@@ -1,29 +1,28 @@
 import pandas as pd 
 import requests
 from sqlalchemy import create_engine, DateTime,Float,String
-# from claves import USUARIO, CONTRASEÑA,ENDPOINT,PUERTO,BASE_DE_DATOS,API_KEY
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.models import Variable
-from airflow.operators.email_operator import EmailOperator
 
-USUARIO = Variable.get("USUARIO")
-CONTRASEÑA = Variable.get("CONTRASEÑA")
+
+
+USER = Variable.get("USER")
+PASSWORD = Variable.get("PASSWORD")
 ENDPOINT = Variable.get("ENDPOINT")
-PUERTO = Variable.get("PUERTO")
-BASE_DE_DATOS = Variable.get("BASE_DE_DATOS")
+PORT = Variable.get("PORT")
+DATABASE = Variable.get("DATABASE")
 API_KEY = Variable.get("API_KEY")
+connection_string = f"postgresql://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}"
 
-
-def extract_data():
+def extract_data_to_db():
     latylon_ciudades={"Madrid":[40.4165000,-3.7025600],"Barcelona":[41.3887900,2.1589900],
                       "Valencia":[39.4697500,-0.3773900],"Sevilla":[37.3828300,-5.9731700],
                       "Zaragoza":[41.6560600,-0.8773400],"Málaga":[36.7201600,-4.4203400]}
     ciudades_data=[]
     for i in range(len(list(latylon_ciudades.keys()))):
         BASE_URL= f"https://api.tomorrow.io/v4/timelines?location={latylon_ciudades[list(latylon_ciudades.keys())[i]][0]},{latylon_ciudades[list(latylon_ciudades.keys())[i]][1]}&fields=temperature&timesteps=1h&units=metric&apikey={API_KEY}"
-        print(BASE_URL)
         resp = requests.get(BASE_URL)
         data = resp.json()
         print(data)
@@ -35,36 +34,23 @@ def extract_data():
         df2 = df2.rename(columns = {"startTime" : "fecha"})
         df2['fecha'] = pd.to_datetime(df2['fecha']).dt.strftime('%Y-%m-%d %H:%M:%S')
         ciudades_data.append(df2)
+    print("correct data extraction")
     df = pd.concat(ciudades_data)
-    return df
-
-def data_to_db(df):
-    # df = extract_data()
-    connection_string = f"postgresql://{USUARIO}:{CONTRASEÑA}@{ENDPOINT}:{PUERTO}/{BASE_DE_DATOS}"
     engine = create_engine(connection_string)
     dtype = {'Fecha': DateTime(), 'Temp': Float(), 'Ciudad': String()}
     df.to_sql('weather', con=engine, if_exists='append',index=False,dtype=dtype)
+
     
-
-
-def read_from_db(table):
-    connection_string = f"postgresql://{USUARIO}:{CONTRASEÑA}@{ENDPOINT}:{PUERTO}/{BASE_DE_DATOS}"
+def extract_manipulate_insert_data(table):
     engine = create_engine(connection_string)
     query = f'SELECT * FROM {table}'
-    lectura = pd.read_sql(query,engine)
-    return lectura 
-
-def transform_data(data):
+    data = pd.read_sql(query,engine)
     data["Date"] = pd.to_datetime(data["fecha"]).dt.date
     data["Month"] = pd.to_datetime(data["fecha"]).dt.month
     data["Day"] = pd.to_datetime(data["fecha"]).dt.day
     data["year"] = pd.to_datetime(data["fecha"]).dt.year
     fecha_ciudad = data.groupby(["Date","ciudad"])["temp"].mean().reset_index()
     fecha_ciudad = fecha_ciudad.round(2)
-    return fecha_ciudad
-
-def load_by_city(fecha_ciudad):
-    connection_string = f"postgresql://{USUARIO}:{CONTRASEÑA}@{ENDPOINT}:{PUERTO}/{BASE_DE_DATOS}"
     engine = create_engine(connection_string)
     for i in fecha_ciudad["ciudad"].unique():
         nombre_tabla = f'datos_climaticos_{i}'
@@ -106,36 +92,14 @@ with DAG(
     
     extract = PythonOperator(
         task_id = "extract",
-        python_callable=extract_data,
+        python_callable=extract_data_to_db,
 
     )
 
-    data_db = PythonOperator(
-        task_id = "data_db",
-        python_callable=data_to_db,
-        op_kwargs={"df": extract.output},
-
-    )
-
-    read_db = PythonOperator(
-        task_id = "read_db",
-        python_callable=read_from_db,
+    read_transform_insert = PythonOperator(
+        task_id = "read_transform_insert",
+        python_callable=extract_manipulate_insert_data,
         op_kwargs={'table': 'weather'},
-        
-    )
-    transform = PythonOperator(
-        task_id = "transform",
-        python_callable=transform_data,
-        op_kwargs={"data": read_db.output},
-        
     )
 
-    load_city = PythonOperator(
-        task_id = "load_city",
-        python_callable=load_by_city,
-        op_kwargs={"fecha_ciudad": transform.output},
-        
-    )
-
-
-    extract >> data_db >> read_db >> transform >>  load_city  
+    extract  >> read_transform_insert 
