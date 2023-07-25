@@ -10,7 +10,7 @@
 
 ### Pasos Seguidos.
 
-* [1- Instalación herramientas necesarias (WSL, Visual studio, dbeaver)]
+* 1- Instalación herramientas necesarias (WSL, Visual studio, dbeaver)
 * 2- Descargar Docker Desktop.
 * 3- Instalar Extensiones en visual studio, recomendable(Docker).
 * 4- Configurar base de datos AWS en dbeaver (Credenciales aportados por Coderhouse).
