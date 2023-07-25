@@ -39,12 +39,12 @@ El archivo cuenta con los siguientes componentes:
 
 ## Dags: 
 El programa DAG se compone de un archivo .py que contiene el código que ejecuta la consulta. El programa se estructura de la siguiente manera: 
-    1- la importacion de las librerias necesarias.
-    2- Creación de las variables que se utilizarán posteriormente (es necesario crear estas variables en Airflow para poder reutilizarlas de manera segura en el código). 
-    3- Creación del DAG. 
-    4- Definición de las tareas del DAG. 
-    5- Las tareas del dag. 
-    6- Definición de las funciones.
+   * 1- la importacion de las librerias necesarias.
+   * 2- Creación de las variables que se utilizarán posteriormente (es necesario crear estas variables en Airflow para poder reutilizarlas de manera segura en el código). 
+   * 3- Creación del DAG. 
+   * 4- Definición de las tareas del DAG. 
+   * 5- Las tareas del dag. 
+   * 6- Definición de las funciones.
 
 ## docker-compose.yaml:
 Documento donde describimos todo lo necesario para que el docker pueda trabajar correctamente
