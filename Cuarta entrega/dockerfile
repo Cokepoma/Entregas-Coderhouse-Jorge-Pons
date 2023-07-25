@@ -1,19 +1,15 @@
-# Imagen utilizada
-FROM python:3.7
+# Uso de imagen
+FROM apache/airflow:2.6.2
 
-# Pasamos los archibos necesario al interior de la imagen
-COPY dags/tercera_entrega.py /usr/local/airflow/dags/tercera_entrega.py
+# Insatalación libreiras
+RUN pip install pandas requests sqlalchemy psycopg2-binary
 
-# Instala las dependencias de Airflow
-RUN pip install apache-airflow==2.2.2 \
-    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.2.2/constraints-3.7.txt"
 
-# Configura las variables de entorno necesarias
-ENV AIRFLOW_HOME=/usr/local/airflow
-ENV PYTHONPATH="${PYTHONPATH}:/usr/local/airflow"
 
-# Inicializa la base de datos de Airflow
-RUN airflow db init
+# copiar archivo dentro de contenedor
+COPY dags/cuarta_entrega.py /opt/airflow/dags/
 
-# Inicia el scheduler de Airflow en segundo plano
-CMD ["airflow", "scheduler"]
+#Iniciar aiflow
+RUN airflow db init 
+
+CMD ["webserver"]
