@@ -10,13 +10,13 @@ from airflow.operators.dummy_operator import DummyOperator
 import smtplib
 
 #Variables
-USER = Variable.get("USER")
-PASSWORD = Variable.get("PASSWORD")
-ENDPOINT = Variable.get("ENDPOINT")
-PORT = Variable.get("PORT")
-DATABASE = Variable.get("DATABASE")
-API_KEY = Variable.get("API_KEY")
-connection_string = f"postgresql://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}"
+user = Variable.get("USER")
+password = Variable.get("PASSWORD")
+endpoint = Variable.get("ENDPOINT")
+port = Variable.get("PORT")
+database = Variable.get("DATABASE")
+api_key = Variable.get("API_KEY")
+connection_string = f"postgresql://{user}:{password}@{endpoint}:{port}/{database}"
 start_time = datetime.now()
 
 #Funciones
@@ -51,6 +51,8 @@ def enviar_fallo():
 def enviar_exito():
     enviar("The program execution was successful.")
 
+def enviar_exito2():
+    enviar("The program execution was successful but time out.") 
 
 def extract_data_to_db():
     try:
@@ -63,14 +65,14 @@ def extract_data_to_db():
         #bucle por ciudad,coordenadas:
         for i in range(len(list(latylon_ciudades.keys()))):
             #Consulta
-            BASE_URL= f"https://api.tomorrow.io/v4/timelines?location={latylon_ciudades[list(latylon_ciudades.keys())[i]][0]},{latylon_ciudades[list(latylon_ciudades.keys())[i]][1]}&fields=temperature&timesteps=1h&units=metric&apikey={API_KEY}"
+            BASE_URL= f"https://api.tomorrow.io/v4/timelines?location={latylon_ciudades[list(latylon_ciudades.keys())[i]][0]},{latylon_ciudades[list(latylon_ciudades.keys())[i]][1]}&fields=temperature&timesteps=1h&units=metric&apikey={api_key}"
             resp = requests.get(BASE_URL)
             data = resp.json()
-            print(data)
+            
 
             #Creación dataframe
-            data_prov = pd.DataFrame(data["data"]["timelines"][0]["intervals"][:25])
-            df2 = pd.DataFrame(data_prov)
+            df2 = pd.DataFrame(data["data"]["timelines"][0]["intervals"][:25])
+            
 
             #Transformación variables
             df2['temp'] = df2['values'].apply(lambda x: x['temperature'])
@@ -115,7 +117,6 @@ def extract_manipulate_insert_data(table):
         data["year"] = pd.to_datetime(data["fecha"]).dt.year
         fecha_ciudad = data.groupby(["Date","ciudad"])["temp"].mean().reset_index()
         fecha_ciudad = fecha_ciudad.round(2)
-        engine = create_engine(connection_string)
         for i in fecha_ciudad["ciudad"].unique():
             nombre_tabla = f'datos_climaticos_{i}'
             filtrado = fecha_ciudad[fecha_ciudad["ciudad"]==i].reset_index(drop=True)
@@ -152,14 +153,18 @@ def extract_manipulate_insert_data(table):
 default_args ={
     'owner' : 'Jorge',
     'retries': 1,
-    'retry_delay' : timedelta(minutes=1)
+    'retry_delay' : timedelta(minutes=1),
+    'email_on_failure':True,
+    'email':'algenet4.jpons@gmail.com',
+    'sla_miss_callback':enviar_exito2,
+    
 }
 
 #Creación DAG
 with DAG(
     default_args = default_args,
     dag_id = "Dag_cuarta_entrega",
-    description = "Dag de la tercera entrega de coderhouse",
+    description = "Dag de la cuarta entrega de coderhouse",
     start_date = datetime(2023,1,1),
     schedule_interval = "0 0 * * *",
     catchup=False
@@ -169,6 +174,7 @@ with DAG(
     extract = PythonOperator(
         task_id = "extract",
         python_callable=extract_data_to_db,
+        sla=timedelta(seconds=10)
 
     )
     
@@ -196,4 +202,3 @@ with DAG(
     
     #Orden ejecución tareas
     extract  >> element_executed_successfully >> read_transform_insert  >> [envio_task, envio_task_fail]
-
