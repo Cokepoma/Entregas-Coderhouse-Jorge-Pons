@@ -18,6 +18,7 @@ database = Variable.get("DATABASE")
 api_key = Variable.get("API_KEY")
 connection_string = f"postgresql://{user}:{password}@{endpoint}:{port}/{database}"
 start_time = datetime.now()
+engine = create_engine(connection_string)
 
 #Funciones
 def enviar(subject):
@@ -85,7 +86,6 @@ def extract_data_to_db():
         #Creación final de dataframe y envio a DB
         print("correct data extraction")
         df = pd.concat(ciudades_data)
-        engine = create_engine(connection_string)
         dtype = {'Fecha': DateTime(), 'Temp': Float(), 'Ciudad': String()}
         df.to_sql('weather', con=engine, if_exists='append',index=False,dtype=dtype)
 
@@ -106,7 +106,6 @@ def extract_data_to_db():
 def extract_manipulate_insert_data(table):
     try:
         #Consulta Base de datos
-        engine = create_engine(connection_string)
         query = f'SELECT * FROM {table}'
 
         #Creación dataframe y manipulación de variables
@@ -202,3 +201,4 @@ with DAG(
     
     #Orden ejecución tareas
     extract  >> element_executed_successfully >> read_transform_insert  >> [envio_task, envio_task_fail]
+
