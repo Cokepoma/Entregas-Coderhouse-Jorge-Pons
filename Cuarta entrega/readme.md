@@ -10,26 +10,29 @@
 
 ### Pasos Seguidos.
 
-* 1- Instalación herramientas necesarias (WSL, Visual studio, dbeaver)
-* 2- Descargar Docker Desktop.
-* 3- Instalar Extensiones en visual studio, recomendable(Docker).
-* 4- Configurar base de datos AWS en dbeaver (Credenciales aportados por Coderhouse).
-* 5- Creación de proyecto final para esto tenemos que crear una carpeta en nuestro escritorio y abrir con VScode.
-* 6- Descargar docker-compose.yaml predefinido por airflow en su página web puedes descargarlo desde la consola con el siguiente comando curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.3/docker-compose.yaml'
-* 7- Quitar la descarga automática de dags de prueba AIRFLOW__CORE__LOAD_EXAMPLES: 'false'.
-* 8- Crear las carpetas necesarias Dags, plugins, logs desde consola. mkdir -p ./dags ./logs ./plugins ./config
-* 9- Creación de docker compos desde la consola: docker compose up airflow-init
-* 10- Una vez terminado de levantar el contenedor hay que limpiar el entorno desde consola: docker compose down --volumes --remove-orphans
-* 11- Levantar contenedor desde consola: docker compose up
-* 12- Crear el script que generará el dag, este mismo hay que guardarlo en la carpeta dags
-* 13- Creación de las conexiones en airflow para conectar la base de datos (airflow/admin/connectios)
-* 14- Crear las variables para que estén ocultas (airflow/admin/variables)
-* 15- Como la aplicación envia un email en caso de error, hay que realizar la configuración para ello vamos a nuestra cuenta de google, gestionar nuestrea cuenta, en el buscador insertamos buscar contraseña aplicaciones,  y creamos una nueva diciendo que queremos que sea de correo para windows. 
-* 16- Crear las variables con los correos emisores y receptores
-* 17- Modificar el archivo airflow.cfg en el apartado smtp
-* 18- Con las librerias usadas en el scriot, empatar todas ellas en una imagen para que todo el mundo que lance esta aplicación obtenga las mismas librerias, para ello creamos un archivo dockerfile y ejecutamos en la linea de comandos docker image -t nombre_imagen .
-* 19- En docker compose cambiamos el nombre de la imagen que va a utilizar por defecto y le ponemos el nombre de la imagen creada, en este caso es image_coderhouse_final
-* 20- Levantamos el contenedor con docker compose up 
+1- Instalación herramientas necesarias (WSL, Visual studio, dbeaver)
+2- Descargar Docker Desktop.
+3- Instalar Extensiones en visual studio, recomendable(Docker).
+4- Configurar base de datos AWS en dbeaver (Credenciales aportados por Coderhouse).
+5- Creación de proyecto final para esto tenemos que crear una carpeta en nuestro escritorio y abrir con VScode.
+6- Descargar docker-compose.yaml predefinido por airflow en su página web puedes descargarlo desde la consola con el siguiente comando: curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.3/docker-compose.yaml'
+7- Quitar la descarga automática de dags de prueba AIRFLOW__CORE__LOAD_EXAMPLES: 'false'.
+8- Crear las carpetas necesarias Dags, plugins, logs desde consola. mkdir -p ./dags ./logs ./plugins ./config
+9- Creación de docker compose desde la consola: docker compose up airflow-init
+10- Una vez terminado de levantar el contenedor hay que limpiar el entorno desde consola: docker compose down --volumes --remove-orphans
+11- Levantar contenedor desde consola: docker compose up
+12- Crear el script que generará el dag, este mismo hay que guardarlo en la carpeta dags
+13- Creación de las conexiones en airflow para conectar la base de datos (airflow/admin/connectios)
+14- Crear las variables para que estén ocultas (airflow/admin/variables)
+15- Como la aplicación envia un email en caso de error, hay que realizar la configuración para ello vamos a nuestra cuenta de google, gestionar nuestrea cuenta, en el buscador insertamos buscar contraseña aplicaciones,  y creamos una nueva diciendo que queremos que sea de correo para windows. 
+16- Crear las variables con los correos emisores y receptores en airflow: (airflow/admin/variables) 
+17- Modificar el archivo airflow.cfg en el apartado smtp 
+18- Con las librerias usadas en el script, empatar todas ellas en una imagen para que todo el mundo que lance esta aplicación obtenga las mismas librerias, para ello creamos un archivo dockerfile y ejecutamos en la linea de comandos docker image -t nombre_imagen .
+19- En docker compose cambiamos el nombre de la imagen que va a utilizar por defecto y le ponemos el nombre de la imagen creada, en este caso es image_coderhouse_final
+20- Levantamos el contenedor con docker compose up 
+21- Comprobar el correcto funcionamiento Acceder a airflow desde el navegador: Localhost:8080
+21- En la parte derecha de en el apartado actions pinchamos en el simbolo PLAY.
+22- Para revisar los estados pinchamos dentro del dag, y en el apartado grid vamos viendo los pasos.
 
 
 ### Misión
@@ -39,12 +42,12 @@ El archivo cuenta con los siguientes componentes:
 
 ## Dags: 
 El programa DAG se compone de un archivo .py que contiene el código que ejecuta la consulta. El programa se estructura de la siguiente manera: 
-   * 1- la importacion de las librerias necesarias.
-   * 2- Creación de las variables que se utilizarán posteriormente (es necesario crear estas variables en Airflow para poder reutilizarlas de manera segura en el código). 
-   * 3- Creación del DAG. 
-   * 4- Definición de las tareas del DAG. 
-   * 5- Las tareas del dag. 
-   * 6- Definición de las funciones.
+    1- la importacion de las librerias necesarias.
+    2- Creación de las variables que se utilizarán posteriormente (es necesario crear estas variables en Airflow para poder reutilizarlas de manera segura en el código). 
+    3- Creación del DAG. 
+    4- Definición de las tareas del DAG. 
+    5- Las tareas del dag. 
+    6- Definición de las funciones.
 
 ## docker-compose.yaml:
 Documento donde describimos todo lo necesario para que el docker pueda trabajar correctamente
