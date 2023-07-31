@@ -13,7 +13,7 @@
 * 1- Instalación herramientas necesarias (WSL, Visual studio, dbeaver)
 * 2- Descargar Docker Desktop.
 * 3- Instalar Extensiones en visual studio, recomendable(Docker).
-![Alt text](image-1.png)
+![Alt text](./fotos/image-1.png)
 * 4- Configurar base de datos AWS en dbeaver (Credenciales aportados por Coderhouse).
 ![Alt text](image-2.png)
 * 5- Creación de proyecto final para esto tenemos que crear una carpeta en nuestro escritorio y abrir con VScode.
