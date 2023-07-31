@@ -13,7 +13,9 @@
 * 1- Instalación herramientas necesarias (WSL, Visual studio, dbeaver)
 * 2- Descargar Docker Desktop.
 * 3- Instalar Extensiones en visual studio, recomendable(Docker).
+![Alt text](image-1.png)
 * 4- Configurar base de datos AWS en dbeaver (Credenciales aportados por Coderhouse).
+![Alt text](image-2.png)
 * 5- Creación de proyecto final para esto tenemos que crear una carpeta en nuestro escritorio y abrir con VScode.
 * 6- Descargar docker-compose.yaml predefinido por airflow en su página web puedes descargarlo desde la consola con el siguiente comando: curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.3/docker-compose.yaml'
 * 7- Quitar la descarga automática de dags de prueba AIRFLOW__CORE__LOAD_EXAMPLES: 'false'.
@@ -23,6 +25,7 @@
 * 11- Levantar contenedor desde consola: docker compose up
 * 12- Crear el script que generará el dag, este mismo hay que guardarlo en la carpeta dags
 * 13- Creación de las conexiones en airflow para conectar la base de datos (airflow/admin/connectios)
+* 13.1- Creamos las variables necesarias para trabajar
 * 14- Crear las variables para que estén ocultas (airflow/admin/variables)
 * 15- Como la aplicación envia un email en caso de error, hay que realizar la configuración para ello vamos a nuestra cuenta de google, gestionar nuestrea cuenta, en el buscador insertamos buscar contraseña aplicaciones,  y creamos una nueva diciendo que queremos que sea de correo para windows. 
 * 16- Crear las variables con los correos emisores y receptores en airflow: (airflow/admin/variables) 
@@ -42,12 +45,12 @@ El archivo cuenta con los siguientes componentes:
 
 ## Dags: 
 El programa DAG se compone de un archivo .py que contiene el código que ejecuta la consulta. El programa se estructura de la siguiente manera: 
-    1- la importacion de las librerias necesarias.
-    2- Creación de las variables que se utilizarán posteriormente (es necesario crear estas variables en Airflow para poder reutilizarlas de manera segura en el código). 
-    3- Creación del DAG. 
-    4- Definición de las tareas del DAG. 
-    5- Las tareas del dag. 
-    6- Definición de las funciones.
+* 1- la importacion de las librerias necesarias.
+* 2- Creación de las variables que se utilizarán posteriormente (es necesario crear estas variables en Airflow para poder reutilizarlas de manera segura en el código). 
+* 3- Creación del DAG. 
+* 4- Definición de las tareas del DAG. 
+* 5- Las tareas del dag. 
+* 6- Definición de las funciones.
 
 ## docker-compose.yaml:
 Documento donde describimos todo lo necesario para que el docker pueda trabajar correctamente
