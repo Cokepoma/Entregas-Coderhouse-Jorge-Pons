@@ -14,8 +14,10 @@
 * 2- Descargar Docker Desktop.
 * 3- Instalar Extensiones en visual studio, recomendable(Docker).
 ![Alt text](./fotos/image-1.png)
+
 * 4- Configurar base de datos AWS en dbeaver (Credenciales aportados por Coderhouse).
-![Alt text](./fotos/image-2.png)
+![Alt text](./fotos/image-2.png
+
 * 5- Creación de proyecto final para esto tenemos que crear una carpeta en nuestro escritorio y abrir con VScode.
 * 6- Descargar docker-compose.yaml predefinido por airflow en su página web puedes descargarlo desde la consola con el siguiente comando: curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.3/docker-compose.yaml'
 * 7- Quitar la descarga automática de dags de prueba AIRFLOW__CORE__LOAD_EXAMPLES: 'false'.
