@@ -16,7 +16,7 @@
 ![Alt text](./fotos/image-1.png)
 
 * 4- Configurar base de datos AWS en dbeaver (Credenciales aportados por Coderhouse).
-![Alt text](./fotos/image-2.png
+![Alt text](./fotos/image-2.png)
 
 * 5- Creación de proyecto final para esto tenemos que crear una carpeta en nuestro escritorio y abrir con VScode.
 * 6- Descargar docker-compose.yaml predefinido por airflow en su página web puedes descargarlo desde la consola con el siguiente comando: curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.3/docker-compose.yaml'
@@ -27,10 +27,13 @@
 * 11- Levantar contenedor desde consola: docker compose up
 * 12- Crear el script que generará el dag, este mismo hay que guardarlo en la carpeta dags
 * 13- Creación de las conexiones en airflow para conectar la base de datos (airflow/admin/connectios)
-* 13.1- Creamos las variables necesarias para trabajar
+* 13.1- Creamos la conexión a la base de datos necesarias para trabajar
+* ![Alt text](./fotos/image.png)
 * 14- Crear las variables para que estén ocultas (airflow/admin/variables)
+* 14.1- Tenemos que crear las siguientes variables. (USER, PASSWORD,DATABASE,ENDPOINT,PORT,SMTP_EMAIL_FROM, SMTP_EMAIL_TO, API_KEY Y SMTP_PASSWORD)
+*  ![Alt text](./fotos/image-3.png)
 * 15- Como la aplicación envia un email en caso de error, hay que realizar la configuración para ello vamos a nuestra cuenta de google, gestionar nuestrea cuenta, en el buscador insertamos buscar contraseña aplicaciones,  y creamos una nueva diciendo que queremos que sea de correo para windows. 
-* 16- Crear las variables con los correos emisores y receptores en airflow: (airflow/admin/variables) 
+* 16- Crear las variables con los correos emisores y receptores en airflow: (airflow/admin/variables)
 * 17- Modificar el archivo airflow.cfg en el apartado smtp 
 * 18- Con las librerias usadas en el script, empatar todas ellas en una imagen para que todo el mundo que lance esta aplicación obtenga las mismas librerias, para ello creamos un archivo dockerfile y ejecutamos en la linea de comandos docker image -t nombre_imagen .
 * 19- En docker compose cambiamos el nombre de la imagen que va a utilizar por defecto y le ponemos el nombre de la imagen creada, en este caso es image_coderhouse_final
