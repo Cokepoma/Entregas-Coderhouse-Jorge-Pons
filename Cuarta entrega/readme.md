@@ -25,17 +25,17 @@
 * 12- Crear el script que generará el dag, este mismo hay que guardarlo en la carpeta dags
 * 13- Creación de las conexiones en airflow para conectar la base de datos (airflow/admin/connectios)
 * 13.1- Creamos la conexión a la base de datos necesarias para trabajar
-![Alt text](./fotos/image.png)
+* ![Alt text](./fotos/image.png)
 * 14- Crear las variables para que estén ocultas (airflow/admin/variables)
 * 14.1- Tenemos que crear las siguientes variables. (USER, PASSWORD,DATABASE,ENDPOINT,API_KEY Y PORT)
-![Alt text](./fotos/image-3.png)
+* ![Alt text](./fotos/image-3.png)
 * 15- Como la aplicación envia un email en caso de error Hay que realizar la configuración para ello:
 * 15.1- Vamos a nuestra cuenta de google "Gestionar tu cuenta de google".
-![Alt text](./fotos/image-4.png)
+* ![Alt text](./fotos/image-4.png)
 * 15.2- En el buscador insertamos buscar contraseña aplicaciones.
-![Alt text](./fotos/image-5.png)  
+* ![Alt text](./fotos/image-5.png)  
 * 15.3 Creamos una nueva diciendo que queremos que sea de correo para windows.
-![Alt text](./fotos/image-6.png) 
+* ![Alt text](./fotos/image-6.png) 
 * 16- Crear las variables con los correos emisores y receptores en airflow:(SMTP_EMAIL_FROM, SMTP_EMAIL_TO,  SMTP_PASSWORD) (airflow/admin/variables) 
 * 17- Modificar el archivo airflow.cfg en el apartado smtp 
 * 18- Con las librerias usadas en el script, empatar todas ellas en una imagen para que todo el mundo que lance esta aplicación obtenga las mismas librerias, para ello creamos un archivo dockerfile y ejecutamos en la linea de comandos docker image -t nombre_imagen .
@@ -43,13 +43,13 @@
 * 20- Levantamos el contenedor con docker compose up 
 * 21- Comprobar el correcto funcionamiento Acceder a airflow desde el navegador: Localhost:8080
 * 22- En la parte derecha de en el apartado actions pinchamos en el simbolo PLAY.
-![Alt text](./fotos/image-7.png)
+* ![Alt text](./fotos/image-7.png)
 * 23- Para revisar los estados pinchamos dentro del dag, y en el apartado grid vamos viendo los pasos.
 * RESULTADO
 * Tablas creadas para almacenar la temperaturas de las ciudades
-![Alt text](./fotos/image-8.png)
+* ![Alt text](./fotos/image-8.png)
 * Ejemplo de los campos 
-![Alt text](./fotos/image-9.png)
+* ![Alt text](./fotos/image-9.png)
 
 
 ### Misión
