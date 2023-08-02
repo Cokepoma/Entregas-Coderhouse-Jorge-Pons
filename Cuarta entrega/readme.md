@@ -55,7 +55,7 @@
 * Tablas creadas para almacenar la temperaturas de las ciudades
 * ![Alt text](./fotos/image-8.png)
 * Ejemplo de los campos 
-* ![Alt text](./fotos/image-12.png)
+* ![Alt text](./fotos/image-13.png)
 
 
 ### Misión
