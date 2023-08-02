@@ -45,6 +45,10 @@
 * 22- En la parte derecha de en el apartado actions pinchamos en el simbolo PLAY.
 * ![Alt text](./fotos/image-7.png)
 * 23- Para revisar los estados pinchamos dentro del dag, y en el apartado grid vamos viendo los pasos.
+ * 24- Verificamos que todo la ejecución ha sido correcta.
+![Alt text](./fotos/image-10.png)
+* 25- Vemos si hemos recibido el correo con la correcta ejecución del programa
+![Alt text](./fotos/image-11.png)
 * RESULTADO
 * Tablas creadas para almacenar la temperaturas de las ciudades
 * ![Alt text](./fotos/image-8.png)
