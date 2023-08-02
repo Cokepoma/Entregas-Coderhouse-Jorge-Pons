@@ -19,6 +19,8 @@
 * 6- Descargar docker-compose.yaml predefinido por airflow en su página web puedes descargarlo desde la consola con el siguiente comando: curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.3/docker-compose.yaml'
 * 7- Quitar la descarga automática de dags de prueba AIRFLOW__CORE__LOAD_EXAMPLES: 'false'.
 * 8- Crear las carpetas necesarias Dags, plugins, logs desde consola. mkdir -p ./dags ./logs ./plugins ./config
+* 8.1- Al seguir los pasos de la pagina oficial de airflow tenemos que insertar el siguiente comando. echo -e "AIRFLOW_UID=$(id -u)" > .env
+* 8.2- dentro del propio arichivo .env insertaremos lo siguiente AIRFLOW_UID=50000
 * 9- Creación de docker compose desde la consola: docker compose up airflow-init
 * 10- Una vez terminado de levantar el contenedor hay que limpiar el entorno desde consola: docker compose down --volumes --remove-orphans
 * 11- Levantar contenedor desde consola: docker compose up
