@@ -59,13 +59,16 @@
 
 ### Alertas
 En el proyecto hemos puesto diferentes alertas para verificar el buen funcionamiento del programa.
-*1- SLa , si el tiempo se excede a la marca el sistema nos manda un correo para darnos el aviso. 
+* 1- SLa , si el tiempo se excede a la marca el sistema nos manda un correo para darnos el aviso. 
 ![Alt text](image-14.png)
-*2- Tanto si el programa se ejecuta correctamente como si no lo hace. emitimos un email para tener el control de la situación donde vemos el estado y el tiempo de ejecución.
+* 2- Tanto si el programa se ejecuta correctamente como si no lo hace. emitimos un email para tener el control de la situación donde vemos el estado y el tiempo de ejecución.
 ![Alt text](image-15.png)
 ![Alt text](image-16.png)
-*3- Hemos puesto una alerta en una fecha para emitir un correo para la revisión del código.
+* 3- Hemos puesto una alerta en una fecha para emitir un correo para la revisión del código.
 ![Alt text](image-17.png)
+* 4- La ejecución es correcta como podemos ver en el Grid.
+![Alt text](image-18.png)
+![Alt text](image-19.png)
 
 ### Misión
 Este proyecto tiene como objetivo obtener la temperatura de las principales ciudades de España. El programa está diseñado para obtener los datos con una actualización diaria a través de una consulta programada a una API del tiempo. El programa utiliza un script de Python que se encuentra empaquetado en un contenedor de Docker.
