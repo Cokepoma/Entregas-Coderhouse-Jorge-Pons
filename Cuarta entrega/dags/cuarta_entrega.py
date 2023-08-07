@@ -27,7 +27,7 @@ engine = create_engine(connection_string)
 # Funciones
 def check_and_send_email(subject):
     current_date = datetime.now().date()
-    target_date = datetime(2023, 9, 1).date()
+    target_date = datetime(2023, 9, 1).date() # Fecha a modificar
 
     if current_date == target_date:
         enviar(subject)
