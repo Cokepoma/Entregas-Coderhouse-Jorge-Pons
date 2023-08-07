@@ -19,15 +19,24 @@ database = Variable.get("DATABASE")
 api_key = Variable.get("API_KEY")
 connection_string = f"postgresql://{user}:{password}@{endpoint}:{port}/{database}"
 start_time = datetime.now()
+email_from = Variable.get("SMTP_EMAIL_FROM")
+email_pass = Variable.get("SMTP_PASSWORD")
+email_to = Variable.get("SMTP_EMAIL_TO")
 engine = create_engine(connection_string)
 
 # Funciones
+def check_and_send_email(subject):
+    current_date = datetime.now().date()
+    target_date = datetime(2023, 9, 1).date()
+
+    if current_date == target_date:
+        enviar(subject)
 def enviar(subject):
     try:
         # Creacion SMTP
         x = smtplib.SMTP("smtp.gmail.com", 587)
         x.starttls()
-        x.login(Variable.get("SMTP_EMAIL_FROM"), Variable.get("SMTP_PASSWORD"))
+        x.login(email_from, email_pass)
         subject = f"{subject}"
 
         # Variable calculo de tiempo de ejecución
@@ -40,21 +49,12 @@ def enviar(subject):
         execution_time_str = f"{int(hours)} horas, {int(minutes)} minutos, {int(seconds)} segundos"
         body_text = f"{subject}  \n Execution Time:  {start_time} for {execution_time_str}"
         message = f"Subject: {subject}\n\n{body_text}"
-        x.sendmail(Variable.get("SMTP_EMAIL_FROM"), Variable.get("SMTP_EMAIL_TO"), message)
+        x.sendmail(email_from, email_to, message)
         x.quit()
 
     except Exception as exception:
         print(exception)
         
-
-def enviar_fallo():
-    enviar("The program execution was incorrect")
-
-def enviar_exito():
-    enviar("The program execution was successful.")
-
-def enviar_exito2():
-    enviar("The program execution was successful but time out.") 
 
 def extract_data_to_db():
     try:
@@ -155,8 +155,8 @@ default_args = {
     "retries" : 1,
     "retry_delay" : timedelta(minutes = 1),
     "email_on_failure" : True,
-    "email" : "algenet4.jpons@gmail.com",
-    "sla_miss_callback" : enviar_exito2
+    "sla_miss_callback" : enviar,
+    "sla_miss_callback_kwargs": {"subject": "SLA Fail"},
 }
 
 # Creación DAG
@@ -173,11 +173,7 @@ with DAG(
     extract = PythonOperator(
         task_id = "extract",
         python_callable = extract_data_to_db,
-        sla = timedelta(seconds = 10)
-    )
-    
-    element_executed_successfully = DummyOperator(
-        task_id = "element_executed_successfully"
+        sla = timedelta(seconds = 360),
     )
 
     read_transform_insert = PythonOperator(
@@ -185,19 +181,26 @@ with DAG(
         python_callable = extract_manipulate_insert_data,
         op_kwargs = {"table": "weather"},
     )
+    time_alert = PythonOperator(
+        task_id = 'time_alert',
+        python_callable = check_and_send_email,
+        op_kwargs = {"subject": "Temporary alert you must check the code every month,remember to change the date"}
+    )
 
     envio_task = PythonOperator(
         task_id = "envio_task",
-        python_callable = enviar_exito,
-        trigger_rule = "all_success"
+        python_callable = enviar,
+        trigger_rule = "all_success",
+        op_kwargs = {"subject": "The program execution was successful"}
     )
 
     envio_task_fail = PythonOperator(
         task_id = "envio_task_fail",
-        python_callable = enviar_fallo,
-        trigger_rule = "all_failed"   
+        python_callable = enviar,
+        trigger_rule = "all_failed",
+        op_kwargs = {"subject": "The program execution was incorrect"} 
     )
     
     # Orden ejecución tareas
-    extract  >> element_executed_successfully >> read_transform_insert  >> [envio_task, envio_task_fail]
+    extract  >> read_transform_insert  >> time_alert >> [envio_task, envio_task_fail]
 
